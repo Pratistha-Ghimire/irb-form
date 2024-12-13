@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Manrope:wght@200&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">  
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRB</title>
+    <style></style>
+       
+</head>
+<body>
+    <div class="main">
+        <div class="box">
+            <p>Institutional Review Board Protocol Form</p> 
+            <p id="txt">Thank you for submitting your application to the IRB for consideration. Depending on the level of the
+                review, the IRB members will take between 2 and 4 weeks to consider your application. Prior to submitting
+                please make sure that your application is
+                1. Complete and contains all necessary elements
+                2. Is proofread and error-free (we recommend that you complete it in a separate document and then
+                copy/paste the required sections into this form)
+                3. Contains all necessary attachments.
+                Please be advised that incomplete applications will be returned thus delaying the review/approvals.
+                If you have any questions or need to discuss your application, please email to irb@caldwell.edu
+                </p>
+            <form method="POST">
+                <!-- Added id attributes -->
+                <input type="text" id="name" placeholder="Name" class="xyz" required>  
+                <input type="email" id="email" placeholder="Email Address" class="xyz" required>  
+                <input type="text" id="contact" placeholder="Contact" class="xyz" required>  
+                <input type="text" id="query" placeholder="Department" class="xyz" required>  
+                
+                <br><br>
+                
+                <input type="file" id="fileUpload" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" class="xyz" required multiple>
+                
+                <div class="checkbox-label">
+                    <input type="checkbox" id="notRobot" required>
+                    <span>I'm not a robot</span>
+                </div> <br>
+                
+                <button type="button" class="yu1" onclick="generatePDF()">Download PDF</button> 
+
+                <br><br>
+
+                
+            </form>
+        </div>
+    </div> 
+</body> 
+<script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</html>
