@@ -1,3 +1,6 @@
+import { PDFDocument } from 'pdf-lib';
+import { jsPDF } from 'jspdf';
+import mammoth from 'mammoth';
 
 function countSyllables(word) {
     if (word.length <= 3) return 1;
@@ -27,9 +30,6 @@ function fleschKincaidReadability(text) {
 }
 
 async function generatePDF() {
-    const { PDFDocument } = await import('pdf-lib');
-    const { jsPDF } = window.jspdf;
-
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const contact = document.getElementById('contact').value;
@@ -104,47 +104,12 @@ async function generatePDF() {
                 const uploadedPdfDoc = await PDFDocument.load(uploadedPdfBytes);
                 const uploadedPages = await mergedPdf.copyPages(uploadedPdfDoc, uploadedPdfDoc.getPageIndices());
                 uploadedPages.forEach(page => mergedPdf.addPage(page));
-                
-                //const pdfText = await extractTextFromPDF(uploadedPdfDoc);
-                //allText += pdfText + ' ';
-
             } else if (fileType.includes('word') || file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
-                const noticePage = mergedPdf.addPage();
-                const { helvetica } = await mergedPdf.embedFont(PDFDocument.Standard.Helvetica);
-                noticePage.drawText('Word document attached: ' + file.name, {
-                    x: 50,
-                    y: noticePage.getSize().height - 100,
-                    size: 12,
-                    font: helvetica
-                });
-
                 const arrayBuffer = await file.arrayBuffer();
-                //const wordText = await extractTextFromWord(arrayBuffer);
+                const { value: wordText } = await mammoth.extractRawText({ arrayBuffer });
                 allText += wordText + ' ';
-                
-                const wordBlob = new Blob([await file.arrayBuffer()], { type: fileType });
-                const wordUrl = URL.createObjectURL(wordBlob);
-                const wordLink = document.createElement('a');
-                wordLink.href = wordUrl;
-                wordLink.download = 'original-' + file.name;
-                document.body.appendChild(wordLink);
-                wordLink.click();
-                document.body.removeChild(wordLink);
-                URL.revokeObjectURL(wordUrl);
             }
         }
-
-        // const readingLevel = fleschKincaidReadability(allText);
-
-        
-        // const lastPage = mergedPdf.addPage();
-        // const { helvetica } = await mergedPdf.embedFont(PDFDocument.Standard.Helvetica);
-        // lastPage.drawText(`Document Reading Level: ${readingLevel}`, {
-        //     x: 50,
-        //     y: lastPage.getSize().height - 50,
-        //     size: 12,
-        //     font: helvetica
-        // });
 
         const mergedPdfBytes = await mergedPdf.save();
         const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
@@ -163,34 +128,7 @@ async function generatePDF() {
     }
 }
 
-// async function extractTextFromPDF(pdfBytes) {
-//     const pdfjsLib = await import('pdfjs-dist/webpack');
-//     const loadingTask = pdfjsLib.getDocument({ data: pdfBytes });
-//     const pdf = await loadingTask.promise;
+// Attach to window to make globally accessible
+window.generatePDF = generatePDF;
 
-//     let text = '';
-//     for (let i = 1; i <= pdf.numPages; i++) {
-//         const page = await pdf.getPage(i);
-//         const content = await page.getTextContent();
-//         text += content.items.map(item => item.str).join(' ') + ' ';
-//     }
-//     return text;
-// }
-
-async function extractTextFromWord(arrayBuffer) {
-    try {
-        const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
-        return result.value || '';
-    } catch (error) {
-        console.error('Error extracting text from Word document:', error);
-        return '';
-    }
-}
-
-function handleFileSubmission(event) {
-    event.preventDefault();
-    generatePDF();
-}
-
-window.handleFileSubmission = handleFileSubmission;   
-
+export { generatePDF };
