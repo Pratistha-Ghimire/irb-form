@@ -8,7 +8,7 @@
         "dev": "vite",
         "build": "vite build",
         "preview": "vite preview",
-        "deploy": "npm install && gh-pages -d dist"
+        "deploy": "gh-pages -d dist"
     },
     "devDependencies": {
         "gh-pages": "^6.2.0",
