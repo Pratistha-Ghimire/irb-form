@@ -41,7 +41,7 @@ function fleschKincaidReadability(text) {
 }
 
 async function generatePDF() {
-    const { PDFDocument } = window.pdfLib;
+    import { PDFDocument } from 'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js';
     const { jsPDF } = window.jspdf;
 
     const name = document.getElementById('name').value;
