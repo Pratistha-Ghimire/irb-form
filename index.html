@@ -7,8 +7,205 @@
     <title>IRB</title>
     <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Manrope,sans-serif;background:linear-gradient(135deg,#ece9e6,#fff);display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}.main{display:flex;justify-content:center;align-items:center}.box{width:350px;background:#f9f9f9;border:2px solid #ddd;border-radius:15px;padding:20px;box-shadow:0 4px 8px #0000001a}.box p{font-size:20px;text-align:center;font-family:Fjalla One,sans-serif;margin-bottom:10px}#txt{font-size:12px;text-align:justify;margin-bottom:20px;color:#555}.xyz{border:1px solid #ddd;border-radius:8px;width:100%;height:40px;margin-bottom:15px;font-size:14px;padding:5px 10px;background:#fff;transition:border-color .3s ease}.xyz:focus{border-color:#4a90e2;outline:none}::placeholder{font-size:14px;color:#999}.yu1{text-decoration:none;border:none;padding:12px 20px;width:100%;text-align:center;text-transform:uppercase;background-color:#4a90e2;color:#fff;font-family:Arial,sans-serif;font-weight:700;border-radius:8px;cursor:pointer;transition:background-color .3s ease}.yu1:hover{background-color:#357abd}.checkbox-label{display:flex;align-items:center;margin-bottom:15px}.checkbox-label input{margin-right:10px}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
     <script>
-    (function(){const m=document.createElement("link").relList;if(m&&m.supports&&m.supports("modulepreload"))return;for(const t of document.querySelectorAll('link[rel="modulepreload"]'))y(t);new MutationObserver(t=>{for(const o of t)if(o.type==="childList")for(const n of o.addedNodes)n.tagName==="LINK"&&n.rel==="modulepreload"&&y(n)}).observe(document,{childList:!0,subtree:!0});function d(t){const o={};return t.integrity&&(o.integrity=t.integrity),t.referrerPolicy&&(o.referrerPolicy=t.referrerPolicy),t.crossOrigin==="use-credentials"?o.credentials="include":t.crossOrigin==="anonymous"?o.credentials="omit":o.credentials="same-origin",o}function y(t){if(t.ep)return;t.ep=!0;const o=d(t);fetch(t.href,o)}})();const $="modulepreload",x=function(c){return"/"+c},U={},D=function(m,d,y){let t=Promise.resolve();if(d&&d.length>0){document.getElementsByTagName("link");const n=document.querySelector("meta[property=csp-nonce]"),r=(n==null?void 0:n.nonce)||(n==null?void 0:n.getAttribute("nonce"));t=Promise.allSettled(d.map(e=>{if(e=x(e),e in U)return;U[e]=!0;const a=e.endsWith(".css"),v=a?'[rel="stylesheet"]':"";if(document.querySelector(`link[href="${e}"]${v}`))return;const i=document.createElement("link");if(i.rel=a?"stylesheet":$,a||(i.as="script"),i.crossOrigin="",i.href=e,r&&i.setAttribute("nonce",r),document.head.appendChild(i),a)return new Promise((L,B)=>{i.addEventListener("load",L),i.addEventListener("error",()=>B(new Error(`Unable to preload CSS for ${e}`)))})}))}function o(n){const r=new Event("vite:preloadError",{cancelable:!0});if(r.payload=n,window.dispatchEvent(r),!r.defaultPrevented)throw n}return t.then(n=>{for(const r of n||[])r.status==="rejected"&&o(r.reason);return m().catch(o)})};async function F(){const{PDFDocument:c}=await D(async()=>{const{PDFDocument:e}=await import("pdf-lib");return{PDFDocument:e}},[]),{jsPDF:m}=window.jspdf,d=document.getElementById("name").value,y=document.getElementById("email").value,t=document.getElementById("contact").value,o=document.getElementById("query").value,n=document.getElementById("notRobot").checked,r=document.getElementById("fileUpload");if(!n){alert("Please confirm you are not a robot.");return}if(r.files.length===0){alert("Please select at least one file to upload.");return}try{const e=await c.create(),a=new m;a.setFontSize(16),a.text("IRB Submission Form",20,20),a.setFontSize(12),a.text(`Name: ${d}`,20,40),a.text(`Email: ${y}`,20,50),a.text(`Contact: ${t}`,20,60),a.text(`Query: ${o}`,20,70);const v=a.output("arraybuffer"),i=await c.load(v);(await e.copyPages(i,i.getPageIndices())).forEach(P=>e.addPage(P));let B=`${d} ${y} ${t} ${o} `;for(let P=0;P<r.files.length;P++){const s=r.files[P],u=s.type.toLowerCase();if(u.includes("image")){const g=await s.arrayBuffer();let l;if(u.includes("png"))l=await e.embedPng(g);else if(u.includes("jpeg")||u.includes("jpg"))l=await e.embedJpg(g);else{console.warn(`Unsupported image type: ${u}`);continue}const b=e.addPage(),{width:p,height:h}=l.size(),f=b.getSize().width,R=b.getSize().height,E=Math.min(f/p,R/h);b.drawImage(l,{x:(f-p*E)/2,y:(R-h*E)/2,width:p*E,height:h*E})}else if(u.includes("pdf")){const g=await s.arrayBuffer(),l=await c.load(g);(await e.copyPages(l,l.getPageIndices())).forEach(p=>e.addPage(p))}else if(u.includes("word")||s.name.endsWith(".doc")||s.name.endsWith(".docx")){const g=e.addPage(),{helvetica:l}=await e.embedFont(c.Standard.Helvetica);g.drawText("Word document attached: "+s.name,{x:50,y:g.getSize().height-100,size:12,font:l});const b=await s.arrayBuffer();B+=wordText+" ";const p=new Blob([await s.arrayBuffer()],{type:u}),h=URL.createObjectURL(p),f=document.createElement("a");f.href=h,f.download="original-"+s.name,document.body.appendChild(f),f.click(),document.body.removeChild(f),URL.revokeObjectURL(h)}}const I=await e.save(),O=new Blob([I],{type:"application/pdf"}),S=URL.createObjectURL(O),w=document.createElement("a");w.href=S,w.download="submission-package.pdf",document.body.appendChild(w),w.click(),document.body.removeChild(w),URL.revokeObjectURL(S)}catch(e){console.error("Error processing files:",e),alert("Error processing files. Please try again.")}}function j(c){c.preventDefault(),F()}window.handleFileSubmission=j;
+    
+function countSyllables(word) {
+    if (word.length <= 3) return 1;
+    word = word.toLowerCase();
+    const matches = word.match(/[aeiouy]{1,2}/g);
+    let syllables = matches ? matches.length : 1;
+    if ((word.endsWith("es") && !word.endsWith("sses")) ||
+        (word.endsWith("ed") && !word.endsWith("lled")) ||
+        (word.endsWith("e") && !'aeiouy'.includes(word[word.length-2]))) {
+        syllables--;
+    }
+    return Math.max(1, syllables);
+}
+
+function fleschKincaidReadability(text) {
+    const sentences = text.split(/[.!?]/).filter(sentence => sentence.trim() !== '');
+    const words = text.split(/[^a-zA-Z]+/);
+    var syllables = 0;
+    for (let word of words) {
+        syllables += countSyllables(word);
+    }
+    const gradeLevel = 0.39 * (words.length / sentences.length) + 11.8 * (syllables / words.length) - 15.59;
+    return gradeLevel < 1 ? 'Kindergarten' : 
+           gradeLevel > 16 ? 'Post-graduate' : 
+           gradeLevel > 12 ? 'College' : 
+           Math.floor(gradeLevel) + '-' + Math.ceil(gradeLevel) + ' grade';
+}
+
+async function generatePDF() {
+    const { PDFDocument } = window.pdfLib;
+    const { jsPDF } = window.jspdf;
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const contact = document.getElementById('contact').value;
+    const query = document.getElementById('query').value;
+    const notRobot = document.getElementById('notRobot').checked;
+    const fileInput = document.getElementById('fileUpload');
+
+    if (!notRobot) {
+        alert('Please confirm you are not a robot.');
+        return;
+    }
+
+    if (fileInput.files.length === 0) {
+        alert('Please select at least one file to upload.');
+        return;
+    }
+
+    try {
+        const mergedPdf = await PDFDocument.create();
+
+        const formDoc = new jsPDF();
+        formDoc.setFontSize(16);
+        formDoc.text("IRB Submission Form", 20, 20);
+        formDoc.setFontSize(12);
+        formDoc.text(`Name: ${name}`, 20, 40);
+        formDoc.text(`Email: ${email}`, 20, 50);
+        formDoc.text(`Contact: ${contact}`, 20, 60);
+        formDoc.text(`Query: ${query}`, 20, 70);
+
+        const formPdfBytes = formDoc.output('arraybuffer');
+        const formPdfDoc = await PDFDocument.load(formPdfBytes);
+        const formPages = await mergedPdf.copyPages(formPdfDoc, formPdfDoc.getPageIndices());
+        formPages.forEach(page => mergedPdf.addPage(page));
+
+        let allText = `${name} ${email} ${contact} ${query} `;
+
+        for (let i = 0; i < fileInput.files.length; i++) {
+            const file = fileInput.files[i];
+            const fileType = file.type.toLowerCase();
+
+            if (fileType.includes('image')) {
+                const imageBytes = await file.arrayBuffer();
+                let image;
+                
+                if (fileType.includes('png')) {
+                    image = await mergedPdf.embedPng(imageBytes);
+                } else if (fileType.includes('jpeg') || fileType.includes('jpg')) {
+                    image = await mergedPdf.embedJpg(imageBytes);
+                } else {
+                    console.warn(`Unsupported image type: ${fileType}`);
+                    continue;
+                }
+
+                const imagePage = mergedPdf.addPage();
+                const { width, height } = image.size();
+                const pageWidth = imagePage.getSize().width;
+                const pageHeight = imagePage.getSize().height;
+                
+                const scale = Math.min(
+                    pageWidth / width,
+                    pageHeight / height
+                );
+
+                imagePage.drawImage(image, {
+                    x: (pageWidth - width * scale) / 2,
+                    y: (pageHeight - height * scale) / 2,
+                    width: width * scale,
+                    height: height * scale
+                });
+            } else if (fileType.includes('pdf')) {
+                const uploadedPdfBytes = await file.arrayBuffer();
+                const uploadedPdfDoc = await PDFDocument.load(uploadedPdfBytes);
+                const uploadedPages = await mergedPdf.copyPages(uploadedPdfDoc, uploadedPdfDoc.getPageIndices());
+                uploadedPages.forEach(page => mergedPdf.addPage(page));
+                
+                //const pdfText = await extractTextFromPDF(uploadedPdfDoc);
+                //allText += pdfText + ' ';
+
+            } else if (fileType.includes('word') || file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+                const noticePage = mergedPdf.addPage();
+                const { helvetica } = await mergedPdf.embedFont(PDFDocument.Standard.Helvetica);
+                noticePage.drawText('Word document attached: ' + file.name, {
+                    x: 50,
+                    y: noticePage.getSize().height - 100,
+                    size: 12,
+                    font: helvetica
+                });
+
+                const arrayBuffer = await file.arrayBuffer();
+                //const wordText = await extractTextFromWord(arrayBuffer);
+                allText += wordText + ' ';
+                
+                const wordBlob = new Blob([await file.arrayBuffer()], { type: fileType });
+                const wordUrl = URL.createObjectURL(wordBlob);
+                const wordLink = document.createElement('a');
+                wordLink.href = wordUrl;
+                wordLink.download = 'original-' + file.name;
+                document.body.appendChild(wordLink);
+                wordLink.click();
+                document.body.removeChild(wordLink);
+                URL.revokeObjectURL(wordUrl);
+            }
+        }
+
+        // const readingLevel = fleschKincaidReadability(allText);
+
+        
+        // const lastPage = mergedPdf.addPage();
+        // const { helvetica } = await mergedPdf.embedFont(PDFDocument.Standard.Helvetica);
+        // lastPage.drawText(`Document Reading Level: ${readingLevel}`, {
+        //     x: 50,
+        //     y: lastPage.getSize().height - 50,
+        //     size: 12,
+        //     font: helvetica
+        // });
+
+        const mergedPdfBytes = await mergedPdf.save();
+        const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'submission-package.pdf';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+
+    } catch (error) {
+        console.error('Error processing files:', error);
+        alert('Error processing files. Please try again.');
+    }
+}
+
+// async function extractTextFromPDF(pdfBytes) {
+//     const pdfjsLib = await import('pdfjs-dist/webpack');
+//     const loadingTask = pdfjsLib.getDocument({ data: pdfBytes });
+//     const pdf = await loadingTask.promise;
+
+//     let text = '';
+//     for (let i = 1; i <= pdf.numPages; i++) {
+//         const page = await pdf.getPage(i);
+//         const content = await page.getTextContent();
+//         text += content.items.map(item => item.str).join(' ') + ' ';
+//     }
+//     return text;
+// }
+
+async function extractTextFromWord(arrayBuffer) {
+    try {
+        const result = await mammoth.extractRawText({ arrayBuffer: arrayBuffer });
+        return result.value || '';
+    } catch (error) {
+        console.error('Error extracting text from Word document:', error);
+        return '';
+    }
+}
+
+function handleFileSubmission(event) {
+    event.preventDefault();
+    generatePDF();
+}
+
+window.handleFileSubmission = handleFileSubmission;   
+
 
     </script>
   <script type="module" crossorigin src="/assets/index-r6uqEuif.js"></script>
