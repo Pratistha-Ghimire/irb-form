@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Fjalla+One&family=Manrope:wght@200&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IRB</title>
+    <style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Manrope,sans-serif;background:linear-gradient(135deg,#ece9e6,#fff);display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}.main{display:flex;justify-content:center;align-items:center}.box{width:350px;background:#f9f9f9;border:2px solid #ddd;border-radius:15px;padding:20px;box-shadow:0 4px 8px #0000001a}.box p{font-size:20px;text-align:center;font-family:Fjalla One,sans-serif;margin-bottom:10px}#txt{font-size:12px;text-align:justify;margin-bottom:20px;color:#555}.xyz{border:1px solid #ddd;border-radius:8px;width:100%;height:40px;margin-bottom:15px;font-size:14px;padding:5px 10px;background:#fff;transition:border-color .3s ease}.xyz:focus{border-color:#4a90e2;outline:none}::placeholder{font-size:14px;color:#999}.yu1{text-decoration:none;border:none;padding:12px 20px;width:100%;text-align:center;text-transform:uppercase;background-color:#4a90e2;color:#fff;font-family:Arial,sans-serif;font-weight:700;border-radius:8px;cursor:pointer;transition:background-color .3s ease}.yu1:hover{background-color:#357abd}.checkbox-label{display:flex;align-items:center;margin-bottom:15px}.checkbox-label input{margin-right:10px}
+</style>
+       
+  <link rel="stylesheet" crossorigin href="/assets/index-yuL8yfv0.css">
+</head>
+<body>
+    <div class="main">
+        <div class="box">
+            <p>Institutional Review Board Protocol Form</p> 
+            <p id="txt">Thank you for submitting your application to the IRB for consideration. Depending on the level of the
+                review, the IRB members will take between 2 and 4 weeks to consider your application. Prior to submitting
+                please make sure that your application is
+                1. Complete and contains all necessary elements
+                2. Is proofread and error-free (we recommend that you complete it in a separate document and then
+                copy/paste the required sections into this form)
+                3. Contains all necessary attachments.
+                Please be advised that incomplete applications will be returned thus delaying the review/approvals.
+                If you have any questions or need to discuss your application, please email to irb@caldwell.edu
+                </p>
+            <form method="POST">
+                <!-- Added id attributes -->
+                <input type="text" id="name" placeholder="Name" class="xyz" required>  
+                <input type="email" id="email" placeholder="Email Address" class="xyz" required>  
+                <input type="text" id="contact" placeholder="Contact" class="xyz" required>  
+                <input type="text" id="query" placeholder="Department" class="xyz" required>  
+                
+                <br><br>
+                
+                <input type="file" id="fileUpload" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" class="xyz" required multiple>
+                
+                <div class="checkbox-label">
+                    <input type="checkbox" id="notRobot" required>
+                    <span>I'm not a robot</span>
+                </div> <br>
+                
+                <button type="button" class="yu1" onclick="generatePDF()">Download PDF</button> 
+
+                <br><br>
+
+                
+            </form>
+        </div>
+    </div> 
+    
+</body> 
+<script src="script.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</html>
