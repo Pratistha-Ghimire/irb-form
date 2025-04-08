@@ -12,7 +12,7 @@
 <body>
     <div class="main">
         <div class="box">
-            <p>Institutional Review Board Protocol Form</p> 
+            <h1>Institutional Review Board Protocol Form</p></h1> 
             <p id="txt">Thank you for submitting your application to the IRB for consideration. Depending on the level of the
                 review, the IRB members will take between 2 and 4 weeks to consider your application. Prior to submitting
                 please make sure that your application is
@@ -21,16 +21,28 @@
                 copy/paste the required sections into this form)
                 3. Contains all necessary attachments.
                 Please be advised that incomplete applications will be returned thus delaying the review/approvals.
-                If you have any questions or need to discuss your application, please email to irb@caldwell.edu
+                If you have any questions or need to discuss your application, please Email to:
+                <a href="mailto:irb@caldwell.edu" style="color: #4a90e2; text-decoration: none; font-weight: bold; text-align: center;">irb@caldwell.edu</a>.
                 </p>
             <form method="POST">
-                <!-- Added id attributes -->
+                
                 <input type="text" id="name" placeholder="Name" class="xyz" required>  
                 <input type="email" id="email" placeholder="Email Address" class="xyz" required>  
                 <input type="text" id="contact" placeholder="Contact" class="xyz" required>  
-                <input type="text" id="query" placeholder="Department" class="xyz" required>  
+                <input type="text" id="query" placeholder="Department / Program" class="xyz" required> 
+                
+                <label for="cu-affiliation">Are you a CU student, CU faculty, or CU staff?</label>
+                    <div class="select-container">
+                        <select id="cu-affiliation" name="cu-affiliation" required>
+                            <option value="" disabled selected>Select an option</option>
+                            <option value="student">CU Student</option>
+                            <option value="faculty">CU Faculty</option>
+                            <option value="staff">CU Staff</option>
+                        </select>
+                    </div>  
                 
                 <br><br>
+                <textarea id="consent" rows="4" cols="50" placeholder="Informed consent" class="xyz"></textarea>
                 
                 <input type="file" id="fileUpload" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" class="xyz" required multiple>
                 

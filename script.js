@@ -36,6 +36,10 @@ async function generatePDF() {
     const query = document.getElementById('query').value;
     const notRobot = document.getElementById('notRobot').checked;
     const fileInput = document.getElementById('fileUpload');
+    const informedConsent = document.getElementById('consent').value;
+
+    const readablityScore = fleschKincaidReadability(informedConsent)
+
 
     if (!notRobot) {
         alert('Please confirm you are not a robot.');
@@ -58,6 +62,9 @@ async function generatePDF() {
         formDoc.text(`Email: ${email}`, 20, 50);
         formDoc.text(`Contact: ${contact}`, 20, 60);
         formDoc.text(`Query: ${query}`, 20, 70);
+
+        formDoc.text(`Readability Score (Flesch-Kincaid): ${readablityScore}`, 20, 80);
+
 
         const formPdfBytes = formDoc.output('arraybuffer');
         const formPdfDoc = await PDFDocument.load(formPdfBytes);
