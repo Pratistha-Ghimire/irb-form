@@ -69,7 +69,23 @@ form {
     appearance: none; /* Removes default browser styling */
     position: relative;
     font-family: 'Manrope', sans-serif;
-}
+} 
+.SI{
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 100%;
+    height: 45px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    padding: 10px;
+    background: #fff;
+    transition: border-color 0.3s ease;
+    color: #333;
+    appearance: none; /* Removes default browser styling */
+    position: relative;
+    font-family: 'Manrope', sans-serif;
+} 
+
 
 /* Dropdown container to position the icon */
 .select-container {

@@ -13,7 +13,7 @@ function countSyllables(word) {
         syllables--;
     }
     return Math.max(1, syllables);
-}
+} 
 
 function fleschKincaidReadability(text) {
     const sentences = text.split(/[.!?]/).filter(sentence => sentence.trim() !== '');
@@ -23,11 +23,16 @@ function fleschKincaidReadability(text) {
         syllables += countSyllables(word);
     }
     const gradeLevel = 0.39 * (words.length / sentences.length) + 11.8 * (syllables / words.length) - 15.59;
+    return gradeLevel
+}
+
+function getscorelevel(gradeLevel) {
     return gradeLevel < 1 ? 'Kindergarten' : 
            gradeLevel > 16 ? 'Post-graduate' : 
            gradeLevel > 12 ? 'College' : 
            Math.floor(gradeLevel) + '-' + Math.ceil(gradeLevel) + ' grade';
 }
+
 
 async function generatePDF() {
     const name = document.getElementById('name').value;
@@ -37,9 +42,17 @@ async function generatePDF() {
     const notRobot = document.getElementById('notRobot').checked;
     const fileInput = document.getElementById('fileUpload');
     const informedConsent = document.getElementById('consent').value;
+    const sinfo = document.getElementById('sinfo').value;
 
     const readablityScore = fleschKincaidReadability(informedConsent)
 
+
+    const readablityScoreInfo = fleschKincaidReadability(sinfo)
+
+    const mylevelscore = getscorelevel((readablityScore + readablityScoreInfo)/2)
+
+    console.log("final score is " + mylevelscore )
+    // console.log("readablityScoreInfo is " + readablityScoreInfo )
 
     if (!notRobot) {
         alert('Please confirm you are not a robot.');
@@ -62,8 +75,23 @@ async function generatePDF() {
         formDoc.text(`Email: ${email}`, 20, 50);
         formDoc.text(`Contact: ${contact}`, 20, 60);
         formDoc.text(`Query: ${query}`, 20, 70);
+        const consentText = formDoc.splitTextToSize(`Key Information: ${informedConsent}`, 170); 
+        formDoc.text(consentText, 20, 80);
+        
+        const lineHeight = 10; // Approximate line height in jsPDF
+        const numberOfLines = consentText.length;
+        let nextYPosition = 80 + (numberOfLines * lineHeight);
 
-        formDoc.text(`Readability Score (Flesch-Kincaid): ${readablityScore}`, 20, 80);
+        const consentText2 = formDoc.splitTextToSize(`Study Information: ${sinfo}`, 170);
+        formDoc.text(consentText2, 20, nextYPosition);
+
+        const studyInfoLines = consentText2.length;
+        nextYPosition += studyInfoLines * lineHeight;
+
+
+        formDoc.text(`Readability Score (Flesch-Kincaid): ${mylevelscore}`, 20, nextYPosition);
+
+        // formDoc.text(`Readability Score (Flesch-Kincaid): ${mylevelscore}`, 20, 90);
 
 
         const formPdfBytes = formDoc.output('arraybuffer');
@@ -138,4 +166,4 @@ async function generatePDF() {
 // Attach to window to make globally accessible
 window.generatePDF = generatePDF;
 
-export { generatePDF };
+export { generatePDF }; 
