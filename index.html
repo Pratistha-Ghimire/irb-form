@@ -7,8 +7,8 @@
     <title>IRB</title>
     <style></style>
         
-  <script type="module" crossorigin src="/assets/index-BxSQC3Yp.js"></script>
-  <link rel="stylesheet" crossorigin href="/assets/index-DqBQAPxF.css">
+  <script type="module" crossorigin src="/assets/index-DxJeSYTd.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CFpApw5d.css">
 </head>
 <body>
     <div class="main">
@@ -41,13 +41,26 @@
                             <option value="staff">CU Staff</option>
                         </select>
                     </div>  
+                <input type="text" id="title" placeholder="Title of Study" class="xyz" required>
                 
-                <br><br>
+                <div id="checkbox-label">
+                    <label for="additional-investigator">Is there an additional investigator?</label><br>
+                    <input type="radio" id="additional-investigator-yes" name="additional-investigator" value="yes" required>
+                    <label for="additional-investigator-yes">Yes</label>
+                    <input type="radio" id="additional-investigator-no" name="additional-investigator" value="no" required>
+                    <label for="additional-investigator-no">No</label>
+                </div>
+                <br>
+                Date of Completion of the CITI training: <br>
+                <input type="date" id="start-date" placeholder="Date of Completion of the CITI training" class="xyz" required>
+
+                <div id="readabilityScore">Flesch-Kincaid Score: 0</div>
                 <textarea id="consent" rows="4" cols="50" placeholder="Key Information" class="xyz" height="300px" width="100px" ></textarea>
                 <br>
+                <div id="readabilityScoreSinfo">Flesch-Kincaid Score: 0</div>
                 <textarea id="sinfo" rows="4" cols="50" placeholder="Study Information" class="SI" height="300px" width="100px"></textarea>
-                
-                
+                <br>
+                <label for="fileUpload" class="file-upload-label">Please upload your CITI certificates</label>
                 <input type="file" id="fileUpload" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" class="xyz" required multiple>
                 
                 <div class="checkbox-label">
