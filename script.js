@@ -34,18 +34,32 @@ function getscorelevel(gradeLevel) {
 }
 
 
+const informedConsentInput = document.getElementById('consent');
+informedConsentInput.addEventListener('input', function() {
+    const readablityScore = fleschKincaidReadability(informedConsentInput.value);
+    const mylevelscore = getscorelevel(readablityScore);
+    document.getElementById('readabilityScore').innerText = `Readability Score: ${mylevelscore}`;
+}) 
+
+const sinfoInput = document.getElementById('sinfo');
+sinfoInput.addEventListener('input', function () {
+    const readablityScore = fleschKincaidReadability(sinfoInput.value);
+    const mylevelscore = getscorelevel(readablityScore);
+    document.getElementById('readabilityScoreSinfo').innerText = `Readability Score: ${mylevelscore}`;
+});
+
 async function generatePDF() {
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const contact = document.getElementById('contact').value;
     const query = document.getElementById('query').value;
     const notRobot = document.getElementById('notRobot').checked;
+    const informedConsent = informedConsentInput.value;
     const fileInput = document.getElementById('fileUpload');
-    const informedConsent = document.getElementById('consent').value;
     const sinfo = document.getElementById('sinfo').value;
 
-    const readablityScore = fleschKincaidReadability(informedConsent)
-
+    const readablityScore = fleschKincaidReadability(informedConsent) 
+    
 
     const readablityScoreInfo = fleschKincaidReadability(sinfo)
 

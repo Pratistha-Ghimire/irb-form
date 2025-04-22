@@ -66,7 +66,7 @@ form {
     background: #fff;
     transition: border-color 0.3s ease;
     color: #333;
-    appearance: none; /* Removes default browser styling */
+    appearance: none; 
     position: relative;
     font-family: 'Manrope', sans-serif;
 } 
@@ -81,28 +81,42 @@ form {
     background: #fff;
     transition: border-color 0.3s ease;
     color: #333;
-    appearance: none; /* Removes default browser styling */
+    appearance: none; 
     position: relative;
     font-family: 'Manrope', sans-serif;
 } 
+.file-upload-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #4a90e2;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.file-upload-label:hover {
+    background-color: #357ab8;
+}
 
 
-/* Dropdown container to position the icon */
 .select-container {
     position: relative;
     width: 100%;
 }
 
-/* Custom dropdown arrow */
+
 .select-container::after {
-    content: "▼"; /* Unicode for dropdown arrow */
+    content: "▼"; 
     font-size: 12px;
     color: #999;
     position: absolute;
     right: 15px;
     top: 50%;
     transform: translateY(-50%);
-    pointer-events: none; /* Prevents interaction */
+    pointer-events: none; 
 }
 
 
@@ -111,15 +125,20 @@ select:focus {
     outline: none;
 }
 
-/* Style the dropdown label */
+label[for="additional-investigator"] {
+    font-size: 16px; /* Set font size to 12px */
+    font-family: 'Manrope', sans-serif; /* Ensure consistent font family */
+    color: #333; /* Optional: Ensure consistent text color */
+}
+
 label {
-    font-family: 'Manrope', sans-serif; /* Match the form fields */
+    font-family: 'Manrope', sans-serif; 
     font-size: 14px;
     margin-bottom: 5px;
     color: #333;
 }
 
-/* Submit Button */
+
 .yu1 {
     text-decoration: none;
     border: none;
@@ -140,7 +159,14 @@ label {
     background-color: #357ABD;
 }
 
-/* Checkbox Label */
+#readabilityScore{
+    margin-left: 300px;
+    color: red;
+} 
+#readabilityScoreSinfo{
+    margin-left: 300px;
+    color: red;
+}
 .checkbox-label {
     display: flex;
     align-items: center;
@@ -152,7 +178,7 @@ label {
     margin-right: 10px; 
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
     .box {
         max-width: 100%;
