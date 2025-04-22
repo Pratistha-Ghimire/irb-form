@@ -36,34 +36,49 @@ function getscorelevel(gradeLevel) {
 
 const informedConsentInput = document.getElementById('consent');
 informedConsentInput.addEventListener('input', function() {
-    const readablityScore = fleschKincaidReadability(informedConsentInput.value);
+    updateScore(informedConsentInput.value, sinfoInput.value);
+}) 
+
+function updateScore(consent, sinfo) {
+    const combinedText = consent + sinfo;
+    const readablityScore = fleschKincaidReadability(combinedText);
     const mylevelscore = getscorelevel(readablityScore);
     document.getElementById('readabilityScore').innerText = `Readability Score: ${mylevelscore}`;
-}) 
+
+
+        if (readablityScore >= 12) {
+            document.getElementById('readabilityScore').style.color = 'green';
+    } else {
+        document.getElementById('readabilityScore').style.color = 'red'; 
+    }
+}
 
 const sinfoInput = document.getElementById('sinfo');
 sinfoInput.addEventListener('input', function () {
-    const readablityScore = fleschKincaidReadability(sinfoInput.value);
-    const mylevelscore = getscorelevel(readablityScore);
-    document.getElementById('readabilityScoreSinfo').innerText = `Readability Score: ${mylevelscore}`;
+    updateScore(informedConsentInput.value, sinfoInput.value);
 });
 
 async function generatePDF() {
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
     const contact = document.getElementById('contact').value;
-    const query = document.getElementById('query').value;
+    const department = document.getElementById('department').value;
     const notRobot = document.getElementById('notRobot').checked;
+    const cuAffiliation = document.getElementById('cu-affiliation').value;
+    const titleOfStudy = document.getElementById('title').value;
+    const additionalInvestigator = document.querySelector('input[name="additional-investigator"]:checked').value;
+    const citiCompletionDate = document.getElementById('start-date').value;
     const informedConsent = informedConsentInput.value;
     const fileInput = document.getElementById('fileUpload');
     const sinfo = document.getElementById('sinfo').value;
 
-    const readablityScore = fleschKincaidReadability(informedConsent) 
-    
+    const combinedText = informedConsent + sinfo;
 
-    const readablityScoreInfo = fleschKincaidReadability(sinfo)
+    // const readablityScore = fleschKincaidReadability(informedConsent) 
+    // const readablityScoreInfo = fleschKincaidReadability(sinfo)
 
-    const mylevelscore = getscorelevel((readablityScore + readablityScoreInfo)/2)
+    // const mylevelscore = getscorelevel((readablityScore + readablityScoreInfo)/2)
+    const mylevelscore = getscorelevel(fleschKincaidReadability(combinedText))
 
     console.log("final score is " + mylevelscore )
     // console.log("readablityScoreInfo is " + readablityScoreInfo )
@@ -88,13 +103,26 @@ async function generatePDF() {
         formDoc.text(`Name: ${name}`, 20, 40);
         formDoc.text(`Email: ${email}`, 20, 50);
         formDoc.text(`Contact: ${contact}`, 20, 60);
-        formDoc.text(`Query: ${query}`, 20, 70);
-        const consentText = formDoc.splitTextToSize(`Key Information: ${informedConsent}`, 170); 
-        formDoc.text(consentText, 20, 80);
+        formDoc.text(`Department: ${department}`, 20, 70);
+        formDoc.text(`CU Affiliation: ${cuAffiliation}`, 20, 80);
+        formDoc.text(`Title of Study: ${titleOfStudy}`, 20, 90);
+        formDoc.text(`Additional Investigator: ${additionalInvestigator}`, 20, 100);
+        formDoc.text(`CITI Completion Date: ${citiCompletionDate}`, 20, 110);
+
         
-        const lineHeight = 10; // Approximate line height in jsPDF
+        const consentText = formDoc.splitTextToSize(`Key Information: ${informedConsent}`, 170); 
+
+        // formDoc.text(consentText, 20, 80); 
+        
+        const lineHeight = 10; 
         const numberOfLines = consentText.length;
-        let nextYPosition = 80 + (numberOfLines * lineHeight);
+        // let nextYPosition = 120 + (numberOfLines * lineHeight); 
+        const boxHeight = numberOfLines * lineHeight;
+        formDoc.rect(15, 115, 180, boxHeight + 10); 
+        formDoc.text(consentText, 20, 120);
+        let nextYPosition = 120 + boxHeight + 10;
+ 
+
 
         const consentText2 = formDoc.splitTextToSize(`Study Information: ${sinfo}`, 170);
         formDoc.text(consentText2, 20, nextYPosition);
@@ -113,7 +141,7 @@ async function generatePDF() {
         const formPages = await mergedPdf.copyPages(formPdfDoc, formPdfDoc.getPageIndices());
         formPages.forEach(page => mergedPdf.addPage(page));
 
-        let allText = `${name} ${email} ${contact} ${query} `;
+        let allText = `${name} ${email} ${contact} ${department} `;
 
         for (let i = 0; i < fileInput.files.length; i++) {
             const file = fileInput.files[i];

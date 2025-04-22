@@ -162,11 +162,9 @@ label {
 #readabilityScore{
     margin-left: 300px;
     color: red;
+    font-weight: bolder;
 } 
-#readabilityScoreSinfo{
-    margin-left: 300px;
-    color: red;
-}
+
 .checkbox-label {
     display: flex;
     align-items: center;
