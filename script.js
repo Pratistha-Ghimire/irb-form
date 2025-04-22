@@ -120,16 +120,21 @@ async function generatePDF() {
         const boxHeight = numberOfLines * lineHeight;
         formDoc.rect(15, 115, 180, boxHeight + 10); 
         formDoc.text(consentText, 20, 120);
-        let nextYPosition = 120 + boxHeight + 10;
+
+        let nextYPosition = 120 + boxHeight + 20;
  
 
 
         const consentText2 = formDoc.splitTextToSize(`Study Information: ${sinfo}`, 170);
-        formDoc.text(consentText2, 20, nextYPosition);
-
-        const studyInfoLines = consentText2.length;
-        nextYPosition += studyInfoLines * lineHeight;
-
+        
+            for (let i = 0; i < consentText2.length; i++) {
+            if (nextYPosition + lineHeight > 280) { 
+                formDoc.addPage(); 
+                nextYPosition = 20; 
+            }
+            formDoc.text(consentText2[i], 20, nextYPosition); 
+            nextYPosition += lineHeight; // Increment Y position
+            }
 
         formDoc.text(`Readability Score (Flesch-Kincaid): ${mylevelscore}`, 20, nextYPosition);
 
