@@ -164,6 +164,13 @@ label {
     color: red;
     font-weight: bolder;
 } 
+@media (max-width: 768px) {
+    #readabilityScore {
+        margin-left: 0; 
+        margin-right: 0; 
+        text-align: center;
+    }
+}
 
 .checkbox-label {
     display: flex;
